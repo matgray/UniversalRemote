@@ -1,4 +1,6 @@
-package me.mgray.universalremote.client;
+package me.mgray.universalremote.client.ui;
+
+import me.mgray.universalremote.client.model.ServerConnector;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -7,6 +9,7 @@ public class Client extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
+    private JTextPane androidUniversalRemoteTextPane;
 
     public Client() {
         setContentPane(contentPane);
@@ -42,8 +45,7 @@ public class Client extends JDialog {
     }
 
     private void onOK() {
-// add your code here
-        dispose();
+        ServerConnector.createNew().connect();
     }
 
     private void onCancel() {
