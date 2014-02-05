@@ -4,9 +4,15 @@
 
 <web-app>
     <display-name>Archetype Created Web Application</display-name>
+    <listener>
+        <listener-class>
+            me.mgray.universalremote.server.tcp.ServerSocketListener
+        </listener-class>
+    </listener>
     <servlet>
         <servlet-name>simple</servlet-name>
-        <servlet-class>me.mgray.universalremote.server.Server</servlet-class>
+        <servlet-class>me.mgray.universalremote.server.http.Server
+        </servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>simple</servlet-name>
