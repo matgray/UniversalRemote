@@ -5,7 +5,7 @@
  * Attribution-NonCommercial-ShareAlike 4.0 International License.
  ******************************************************************************/
 
-package me.mgray.universalremote.client.view;
+package me.mgray.universalremote.client;
 
 import me.mgray.universalremote.client.model.ServerConnector;
 

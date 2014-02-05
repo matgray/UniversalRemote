@@ -24,15 +24,15 @@ public class CommandListener implements Runnable {
 
     public void run() {
         Gson gson = new Gson();
-        while (true) {
-            try {
-                String incomingCommand = connection.read();
+        try {
+            String incomingCommand;
+            while ((incomingCommand = connection.read()) != null) {
                 System.out.println("Received Event:\n" + incomingCommand);
                 EventBus.publish(new CommandReceivedEvent(
                         gson.fromJson(incomingCommand, Command.class)));
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
-}
+    }

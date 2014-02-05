@@ -8,6 +8,7 @@
 package me.mgray.universalremote.server.tcp.model;
 
 import com.google.gson.Gson;
+import me.mgray.universalremote.server.tcp.model.event.CommandEvent;
 import me.mgray.universalremote.shared.Command;
 
 import java.io.IOException;
@@ -19,27 +20,23 @@ import java.util.concurrent.Executors;
 public class ClientService {
     private static ClientService INSTANCE;
 
-    private ExecutorService socketService;
-    private Map<String, ClientConnection> connectionMap;
-    private Gson gson;
+    private ExecutorService socketService = Executors.newCachedThreadPool();
+    private Map<String, ClientConnection> connectionMap =
+            new HashMap<String, ClientConnection>();
+    private Gson gson = new Gson();
 
     private ClientService() {
         //no-op
     }
 
     public static ClientService getInstance() {
-        System.out.println("returning instance");
         if (INSTANCE == null) {
             INSTANCE = new ClientService();
-            INSTANCE.socketService = Executors.newCachedThreadPool();
-            INSTANCE.connectionMap = new HashMap<String, ClientConnection>();
         }
         return INSTANCE;
     }
 
     public void clientConnected(final ClientConnection connection) {
-
-
         //Listen for messages from client
         socketService.submit(new Runnable() {
             @Override
@@ -57,6 +54,7 @@ public class ClientService {
                 }
             }
         });
+        connectionMap.put(connection.getSessionId(), connection);
     }
 
     public void sendCommand(String clientId, Command command) {
@@ -67,5 +65,14 @@ public class ClientService {
 
     public void onReadFromClient(String data) {
         System.out.println("Client says: " + data);
+    }
+
+    public void onCommandRecieved(CommandEvent event) {
+        System.out.println("Command Recieved by client service");
+        ClientConnection connection = connectionMap.get(event.getCommand().getSessionId());
+        System.out.println("gson initialized");
+        if (connection != null) {
+            connection.write(gson.toJson(event.getCommand()));
+        }
     }
 }

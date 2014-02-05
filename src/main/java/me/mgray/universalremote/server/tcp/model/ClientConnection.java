@@ -10,7 +10,6 @@ package me.mgray.universalremote.server.tcp.model;
 import me.mgray.universalremote.shared.Connection;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.Socket;
 import java.security.SecureRandom;
 
@@ -25,7 +24,8 @@ public class ClientConnection extends Connection {
     }
 
     public static String nextSessionId() {
-        return new BigInteger(130, random).toString(32);
+//        return new BigInteger(130, random).toString(32);
+        return "test";
     }
 
     public String getSessionId() {

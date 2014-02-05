@@ -8,6 +8,8 @@
 package me.mgray.universalremote.server.tcp.model;
 
 import me.mgray.universalremote.server.shared.InternalConnection;
+import me.mgray.universalremote.server.tcp.model.event.CommandEvent;
+import me.mgray.universalremote.shared.Command;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -29,11 +31,18 @@ public class HttpServletSocketService {
         Runnable listenRunnable = new Runnable() {
             @Override
             public void run() {
-                String inputLine;
+                Command command;
                 try {
-                    while ((inputLine = connection.getObjectInputStream().
-                            readObject().toString()) != null) {
-                        System.out.println("Got " + inputLine + " from http server");
+                    while ((command = (Command) connection.getObjectInputStream().
+                            readObject()) != null) {
+                        final CommandEvent commandEvent = new CommandEvent(command);
+                        System.out.println("TCP server received new command");
+                        listenerService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                ClientService.getInstance().onCommandRecieved(commandEvent);
+                            }
+                        });
                     }
                 } catch (IOException e) {
                     return;

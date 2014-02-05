@@ -8,6 +8,7 @@
 package me.mgray.universalremote.server.http;
 
 import me.mgray.universalremote.server.shared.InternalConnection;
+import me.mgray.universalremote.shared.Command;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,8 +27,16 @@ public class Server extends HttpServlet {
         if (serverConnection == null) {
             serverConnection = new InternalConnection(new Socket("127.0.0.1", 15414));
         }
-        serverConnection.write("foobar");
-        out.println("SimpleServlet Executed");
+        String sessionId = request.getParameter("sessionId");
+        String command = request.getParameter("command");
+        if (sessionId != null && command != null) {
+            System.out.println("HTTP Server recieved new command");
+            serverConnection.write(new Command(sessionId, command));
+            out.println("Command sent to " + sessionId);
+        } else {
+            out.println("Invalid Request");
+        }
+
         out.flush();
         out.close();
     }
