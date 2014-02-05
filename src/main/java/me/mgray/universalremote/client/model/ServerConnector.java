@@ -22,6 +22,7 @@ public class ServerConnector {
     private String hostname;
     private Connection serverConnection = null;
     private Executor socketListener = Executors.newSingleThreadExecutor();
+    private String sessionID;
 
     public static ServerConnector createNew() {
         ApplicationContext context = new ClassPathXmlApplicationContext("Client-Configuration.xml");
@@ -31,6 +32,9 @@ public class ServerConnector {
     public void connect() {
         try {
             serverConnection = new Connection(new Socket(hostname, port));
+            // Upon connection, server will give the session id
+            sessionID = serverConnection.read();
+            // Listen for commands
             socketListener.execute(new CommandListener(serverConnection));
         } catch (UnknownHostException e) {
             System.err.println(String.format("Don't know about host: %s", hostname));
@@ -47,5 +51,9 @@ public class ServerConnector {
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
+    }
+
+    public String getSessionID() {
+        return sessionID;
     }
 }

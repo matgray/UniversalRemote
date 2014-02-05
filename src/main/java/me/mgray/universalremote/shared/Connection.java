@@ -20,11 +20,9 @@ public class Connection {
     private BufferedReader in;
 
     public Connection(Socket socket) throws IOException {
-        PrintWriter out =
-                new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in =
-                new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
+        out = new PrintWriter(socket.getOutputStream(), true);
+        in = new BufferedReader(
+                new InputStreamReader(socket.getInputStream()));
     }
 
     public void write(String s) {
@@ -33,5 +31,9 @@ public class Connection {
 
     public String read() throws IOException {
         return in.readLine();
+    }
+
+    public Socket getSocket() {
+        return socket;
     }
 }

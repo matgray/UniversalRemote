@@ -42,8 +42,7 @@ public class ServerSocketListener implements ServletContextListener {
                             client = serverSocket.accept();
                             System.out.print("Client connecting...");
                             ClientConnection c = new ClientConnection(client);
-                            ClientService cs = ClientService.getInstance();
-                            cs.clientConnected(c);
+                            ClientService.getInstance().clientConnected(c);
                             System.out.println(" Success!");
                         } catch (IOException e) {
                             e.printStackTrace();

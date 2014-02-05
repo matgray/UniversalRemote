@@ -10,20 +10,25 @@ package me.mgray.universalremote.server.tcp.model;
 import me.mgray.universalremote.shared.Connection;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.Socket;
+import java.security.SecureRandom;
 
 public class ClientConnection extends Connection {
 
-    private String hostname;
-    private String macAddress;
+    private String sessionId;
+    private static SecureRandom random = new SecureRandom();
 
     public ClientConnection(Socket socket) throws IOException {
         super(socket);
-        System.out.println(" client initialized");
+        this.sessionId = nextSessionId();
     }
 
-    public String getId() {
-        return "test_id_1";
+    public static String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
     }
 
+    public String getSessionId() {
+        return sessionId;
+    }
 }

@@ -10,6 +10,7 @@ package me.mgray.universalremote.server.tcp.model;
 import com.google.gson.Gson;
 import me.mgray.universalremote.shared.Command;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -36,13 +37,35 @@ public class ClientService {
         return INSTANCE;
     }
 
-    public void clientConnected(ClientConnection connection) {
-        connectionMap.put(connection.getId(), connection);
+    public void clientConnected(final ClientConnection connection) {
+
+
+        //Listen for messages from client
+        socketService.submit(new Runnable() {
+            @Override
+            public void run() {
+                String line;
+                try {
+                    // Let the client know the session id
+                    connection.write(connection.getSessionId());
+                    // Listen for reads from client
+                    while ((line = connection.read()) != null) {
+                        onReadFromClient(line);
+                    }
+                } catch (IOException e) {
+                    return;
+                }
+            }
+        });
     }
 
     public void sendCommand(String clientId, Command command) {
         Gson gson = new Gson();
         String json = gson.toJson(command, Command.class);
         connectionMap.get(clientId).write(json);
+    }
+
+    public void onReadFromClient(String data) {
+        System.out.println("Client says: " + data);
     }
 }

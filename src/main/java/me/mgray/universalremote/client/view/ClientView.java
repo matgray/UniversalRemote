@@ -5,20 +5,19 @@
  * Attribution-NonCommercial-ShareAlike 4.0 International License.
  ******************************************************************************/
 
-package me.mgray.universalremote.client.ui;
+package me.mgray.universalremote.client.view;
 
 import me.mgray.universalremote.client.model.ServerConnector;
 
 import javax.swing.*;
 import java.awt.event.*;
 
-public class Client extends JDialog {
+public class ClientView extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextPane androidUniversalRemoteTextPane;
 
-    public Client() {
+    public ClientView() {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -61,7 +60,7 @@ public class Client extends JDialog {
     }
 
     public static void main(String[] args) {
-        Client dialog = new Client();
+        ClientView dialog = new ClientView();
         dialog.pack();
         dialog.setVisible(true);
         System.exit(0);
