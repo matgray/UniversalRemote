@@ -10,7 +10,7 @@
 
     <bean id="serverConnector"
           class="me.mgray.universalremote.client.model.ServerConnector">
-        <property name="hostname" value="127.0.0.1"/>
+        <property name="hostname" value="mgray.me"/>
         <property name="port" value="15413"/>
     </bean>
 </beans>
