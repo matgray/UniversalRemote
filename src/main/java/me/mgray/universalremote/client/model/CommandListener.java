@@ -12,14 +12,18 @@ import me.mgray.universalremote.client.model.event.CommandReceivedEvent;
 import me.mgray.universalremote.shared.Command;
 import me.mgray.universalremote.shared.Connection;
 import org.bushe.swing.event.EventBus;
+import org.bushe.swing.event.annotation.AnnotationProcessor;
 
 import java.io.IOException;
 
 public class CommandListener implements Runnable {
     Connection connection;
+    ClientRobot clientRobot;
 
     public CommandListener(Connection connection) {
         this.connection = connection;
+        clientRobot = ClientRobot.getInstance();
+        AnnotationProcessor.process(clientRobot);
     }
 
     public void run() {
