@@ -30,7 +30,7 @@ public class ClientView extends JDialog {
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonConnect);
-        contentPane.setPreferredSize(new Dimension(300, 200));
+        contentPane.setPreferredSize(new Dimension(200, 200));
         this.setResizable(false);
 
         AnnotationProcessor.process(this);
