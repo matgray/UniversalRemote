@@ -7,7 +7,9 @@
 
 package me.mgray.universalremote.client.model;
 
+import me.mgray.universalremote.client.model.event.SessionIdRecievedEvent;
 import me.mgray.universalremote.shared.Connection;
+import org.bushe.swing.event.EventBus;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -22,7 +24,7 @@ public class ServerConnector {
     private String hostname;
     private Connection serverConnection = null;
     private Executor socketListener = Executors.newSingleThreadExecutor();
-    private String sessionID;
+    private String sessionId;
 
     public static ServerConnector createNew() {
         ApplicationContext context = new ClassPathXmlApplicationContext("Client-Configuration.xml");
@@ -33,7 +35,8 @@ public class ServerConnector {
         try {
             serverConnection = new Connection(new Socket(hostname, port));
             // Upon connection, server will give the session id
-            sessionID = serverConnection.read();
+            sessionId = serverConnection.read();
+            EventBus.publish(new SessionIdRecievedEvent(sessionId));
             // Listen for commands
             socketListener.execute(new CommandListener(serverConnection));
         } catch (UnknownHostException e) {
@@ -53,7 +56,7 @@ public class ServerConnector {
         this.hostname = hostname;
     }
 
-    public String getSessionID() {
-        return sessionID;
+    public String getSessionId() {
+        return sessionId;
     }
 }

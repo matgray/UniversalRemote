@@ -8,29 +8,36 @@
 package me.mgray.universalremote.client;
 
 import me.mgray.universalremote.client.model.ServerConnector;
+import me.mgray.universalremote.client.model.event.DisconnectEvent;
+import me.mgray.universalremote.client.model.event.SessionIdRecievedEvent;
+import org.bushe.swing.event.EventBus;
+import org.bushe.swing.event.annotation.AnnotationProcessor;
+import org.bushe.swing.event.annotation.EventSubscriber;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
+import java.io.ByteArrayOutputStream;
 
 public class ClientView extends JDialog {
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
+    private JButton buttonConnect;
+    private JPanel mainPanel;
+    private JLabel imageLabel;
+    private boolean connected = false;
 
     public ClientView() {
         setContentPane(contentPane);
         setModal(true);
-        getRootPane().setDefaultButton(buttonOK);
+        getRootPane().setDefaultButton(buttonConnect);
+        contentPane.setPreferredSize(new Dimension(300, 200));
+        this.setResizable(false);
 
-        buttonOK.addActionListener(new ActionListener() {
+        AnnotationProcessor.process(this);
+
+        buttonConnect.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onOK();
-            }
-        });
-
-        buttonCancel.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                onCancel();
             }
         });
 
@@ -51,12 +58,32 @@ public class ClientView extends JDialog {
     }
 
     private void onOK() {
-        ServerConnector.createNew().connect();
+        if (!connected) {
+            ServerConnector.createNew().connect();
+        } else {
+            EventBus.publish(new DisconnectEvent());
+            imageLabel.setIcon(null);
+            imageLabel.setText("Not Connected");
+            buttonConnect.setText("Connect");
+            connected = false;
+        }
     }
 
     private void onCancel() {
 // add your code here if necessary
         dispose();
+    }
+
+    @SuppressWarnings("unused")
+    @EventSubscriber(eventClass = SessionIdRecievedEvent.class)
+    public void onSessionIdRecieved(SessionIdRecievedEvent event) {
+        System.out.println(String.format("Session id received (%s)", event.getSessionId()));
+        ByteArrayOutputStream out = net.glxn.qrgen.QRCode.from(event.getSessionId()).stream();
+        ImageIcon imageIcon = new ImageIcon(out.toByteArray());
+        imageLabel.setText("");
+        imageLabel.setIcon(imageIcon);
+        buttonConnect.setText("Disconnect");
+        connected = true;
     }
 
     public static void main(String[] args) {
