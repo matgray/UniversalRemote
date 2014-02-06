@@ -50,7 +50,7 @@ public class ClientService {
                         onReadFromClient(line);
                     }
                 } catch (IOException e) {
-                    return;
+                    System.out.println("I/O Exception for " + connection.getSessionId());
                 }
             }
         });
