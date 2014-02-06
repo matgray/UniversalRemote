@@ -29,4 +29,8 @@ public class Command implements Serializable {
     public String getSessionId() {
         return sessionId;
     }
+
+    public List<String> getSignalsSequence() {
+        return signals;
+    }
 }
