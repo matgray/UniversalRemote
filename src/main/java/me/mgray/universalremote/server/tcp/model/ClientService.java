@@ -22,7 +22,7 @@ public class ClientService {
 
     private ExecutorService socketService = Executors.newCachedThreadPool();
     private Map<String, ClientConnection> connectionMap =
-            new HashMap<String, ClientConnection>();
+            new HashMap<>();
     private Gson gson = new Gson();
 
     private ClientService() {
