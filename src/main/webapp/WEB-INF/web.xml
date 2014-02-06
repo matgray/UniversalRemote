@@ -10,12 +10,12 @@
         </listener-class>
     </listener>
     <servlet>
-        <servlet-name>simple</servlet-name>
+        <servlet-name>controlServlet</servlet-name>
         <servlet-class>me.mgray.universalremote.server.http.Server
         </servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>simple</servlet-name>
-        <url-pattern>/simple</url-pattern>
+        <servlet-name>controlServlet</servlet-name>
+        <url-pattern>/control</url-pattern>
     </servlet-mapping>
 </web-app>
