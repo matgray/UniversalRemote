@@ -9,7 +9,6 @@ package me.mgray.universalremote.server.tcp.model;
 
 import com.google.gson.Gson;
 import me.mgray.universalremote.server.tcp.model.event.CommandEvent;
-import me.mgray.universalremote.shared.Command;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -55,12 +54,6 @@ public class ClientService {
             }
         });
         connectionMap.put(connection.getSessionId(), connection);
-    }
-
-    public void sendCommand(String clientId, Command command) {
-        Gson gson = new Gson();
-        String json = gson.toJson(command, Command.class);
-        connectionMap.get(clientId).write(json);
     }
 
     public void onReadFromClient(String data) {
