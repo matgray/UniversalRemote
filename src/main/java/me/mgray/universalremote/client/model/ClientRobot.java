@@ -9,6 +9,7 @@ package me.mgray.universalremote.client.model;
 
 import me.mgray.universalremote.client.model.event.CommandReceivedEvent;
 import me.mgray.universalremote.shared.Command;
+import me.mgray.universalremote.shared.Signal;
 import org.bushe.swing.event.annotation.EventSubscriber;
 
 import java.awt.*;
@@ -38,17 +39,16 @@ public class ClientRobot extends Robot {
     @SuppressWarnings("unused")
     @EventSubscriber(eventClass = CommandReceivedEvent.class)
     public void onCommandReceived(CommandReceivedEvent event) {
+        System.out.println("Executing Command");
         Command command = event.getCommand();
-        List<String> signalSequence = command.getSignalsSequence();
-        for (String signal : signalSequence) {
-            String keySignal = signal.substring(1, signal.length());
-            if (signal.charAt(0) == 'p') {
-                System.out.println(String.format("Pressing Key Code: %X", getKeyCodeFromSignal(keySignal)));
-                keyPress(getKeyCodeFromSignal(keySignal));
-            }
-            if (signal.charAt(0) == 'r') {
-                System.out.println(String.format("Releasing Key Code: %X", getKeyCodeFromSignal(keySignal)));
-                keyRelease(getKeyCodeFromSignal(keySignal));
+        List<Signal> signalSequence = command.getSignalsSequence();
+        for (Signal signal : signalSequence) {
+            if (signal.getDirection() == Signal.KeyDirection.DOWN) {
+                System.out.println(String.format("Pressing Key Code: %X", getKeyCodeFromSignal(signal.getKey())));
+                keyPress(getKeyCodeFromSignal(signal.getKey()));
+            } else if (signal.getDirection() == Signal.KeyDirection.UP) {
+                System.out.println(String.format("Releasing Key Code: %X", getKeyCodeFromSignal(signal.getKey())));
+                keyRelease(getKeyCodeFromSignal(signal.getKey()));
             }
         }
     }
@@ -67,6 +67,8 @@ public class ClientRobot extends Robot {
                     return KeyEvent.VK_ALT;
                 case "WIN":
                     return KeyEvent.VK_WINDOWS;
+                case "TAB":
+                    return KeyEvent.VK_TAB;
             }
         }
         return -1;

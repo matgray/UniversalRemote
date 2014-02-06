@@ -13,24 +13,22 @@ import java.util.List;
 
 public class Command implements Serializable {
     private String sessionId;
-    private List<String> signals = new ArrayList<String>();
+    private List<Signal> signals = new ArrayList<>();
 
     public Command() {
         //no-op for json serialization
     }
 
-    public Command(String sessionId, String... signals) {
+    public Command(String sessionId, List<Signal> signals) {
         this.sessionId = sessionId;
-        for (String signal : signals) {
-            this.signals.add(signal);
-        }
+        this.signals = signals;
     }
 
     public String getSessionId() {
         return sessionId;
     }
 
-    public List<String> getSignalsSequence() {
+    public List<Signal> getSignalsSequence() {
         return signals;
     }
 }
