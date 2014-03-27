@@ -3,7 +3,7 @@ Universal Remote
 *Copyright 2014. Mathew Gray. This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.*
 
 
-This suite containing two servlets and a java swing client that allows for your computer's keyboard to be controlled by anything that can access the internet.  Supports multiple clients.  The java swing client does _not_ host a 
+This suite containing two servlets and a java swing client that allows for your computer's keyboard to be controlled by anything that can access the internet.  Supports multiple clients.  The java swing client does _not_ host a server, so no need to be on the same network as the computer you are controlling
 
 ##Use Cases
 
